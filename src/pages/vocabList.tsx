@@ -39,12 +39,12 @@ useEffect(() => {
     <div className="container">
       <h2>単語一覧 (レベル {level})</h2>
       <ul className="vocab-list">
-        {vocabList.map((item) => (
+        {vocabList.map((item,index) => (
           <li key={item.id}>
             <button
               className="vocab-card"
               key={item.id}
-              onClick={() => navigate('/meaning', {state: item})}
+              onClick={() => navigate('/meaning', {state: {vocabList, currentIndex: index}})} 
             >
               {item.word}
             </button>

@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Volume2 } from "lucide-react";
 import Flag from "react-world-flags";
+import { supabase } from "../../supabaseClient";
 
 type Vocab = {
   id: number;
@@ -25,12 +26,71 @@ const speak = (text: string, lang: string) => {
 };
 
 const Meaning = () => {
+  const navigate = useNavigate();
   const location = useLocation();
-  const vocab = location.state as Vocab;
+  const { vocabList, currentIndex } = location.state as {
+  vocabList: Vocab[];
+  currentIndex: number;
+};
+
+const [index, setIndex] = useState(currentIndex);
+const vocab = vocabList[index];
 
   const [generatedSentence, setGeneratedSentence] = useState("");
   const [generatedMeaning, setGeneratedMeaning] = useState("");
   const [loading, setLoading] = useState(false);
+  const [remembered, setRemembered] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isLoadingRemembered, setIsLoadingRemembered] = useState(true); // Add loading state
+
+  // 1. Get current user on mount
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) setUserId(user.id);
+    };
+    fetchUser();
+  }, []);
+
+  // 2. Load if word is already remembered
+  useEffect(() => {
+    if (!userId) return;
+    const loadRemembered = async () => {
+      const { data, error } = await supabase
+        .from("remembered_words")
+        .select("remembered")
+        .eq("user_id", userId)
+        .eq("vocab_id", vocab.id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching remembered state:", error);
+      }
+
+      if (data) {
+        setRemembered(data.remembered); // ✅ already boolean
+      }
+      setIsLoadingRemembered(false); // Set loading state to false after fetching
+    };
+    loadRemembered();
+  }, [userId, vocab.id]);
+
+  // 3. Toggle remembered state
+  const toggleRemembered = async () => {
+    if (!userId) return;
+    const { error } = await supabase.from("remembered_words").upsert(
+      {
+        user_id: userId,
+        vocab_id: vocab.id,
+        remembered: !remembered,
+      },
+      { onConflict: "user_id, vocab_id" }
+    );
+
+    if (!error) setRemembered(!remembered);
+  };
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -46,8 +106,18 @@ const Meaning = () => {
     setLoading(false);
   };
 
+  if (isLoadingRemembered) return <div>Loading...</div>; // Display loading message if the remembered state is still fetching
+
   return (
-    <div className="container">
+    <div className="container relative">
+      <div style={{ position: "fixed", top: "16px", left: "16px", zIndex: 50 }}>
+        <button
+          onClick={() => navigate(-1)}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 shadow"
+        >
+          単語一覧へ戻る
+        </button>
+      </div>
       <div className="row">
         <h1 className="text-xl font-bold">{vocab.word}</h1>
         <button onClick={() => speak(vocab.word, "en-US")}>
@@ -59,6 +129,15 @@ const Meaning = () => {
           <Flag code="GB" style={{ width: 24, height: 16 }} />
         </button>
       </div>
+      {/* Remembered checkbox */}
+      <label className="block my-2">
+        <input
+          type="checkbox"
+          checked={remembered}
+          onChange={toggleRemembered}
+        />{" "}
+        この単語を覚えた
+      </label>
       <h2>{vocab.japanese_meaning}</h2>
       <div className="row">
         <h2>{vocab.example_sentence}</h2>
