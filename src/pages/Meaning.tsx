@@ -29,12 +29,12 @@ const Meaning = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { vocabList, currentIndex } = location.state as {
-  vocabList: Vocab[];
-  currentIndex: number;
-};
+    vocabList: Vocab[];
+    currentIndex: number;
+  };
 
-const [index, setIndex] = useState(currentIndex);
-const vocab = vocabList[index];
+  const [index, setIndex] = useState(currentIndex);
+  const vocab = vocabList[index];
 
   const [generatedSentence, setGeneratedSentence] = useState("");
   const [generatedMeaning, setGeneratedMeaning] = useState("");
@@ -54,28 +54,35 @@ const vocab = vocabList[index];
     fetchUser();
   }, []);
 
-  // 2. Load if word is already remembered
-  useEffect(() => {
-    if (!userId) return;
-    const loadRemembered = async () => {
-      const { data, error } = await supabase
-        .from("remembered_words")
-        .select("remembered")
-        .eq("user_id", userId)
-        .eq("vocab_id", vocab.id)
-        .single();
+useEffect(() => {
+  if (!userId) return;
 
-      if (error) {
-        console.error("Error fetching remembered state:", error);
-      }
+  const vocab = vocabList[index]; // ✅ Recalculate based on index
 
-      if (data) {
-        setRemembered(data.remembered); // ✅ already boolean
-      }
-      setIsLoadingRemembered(false); // Set loading state to false after fetching
-    };
-    loadRemembered();
-  }, [userId, vocab.id]);
+  // Reset UI states when word changes
+  setGeneratedSentence("");
+  setGeneratedMeaning("");
+  setIsLoadingRemembered(true);
+
+  const loadRemembered = async () => {
+    const { data, error } = await supabase
+      .from("remembered_words")
+      .select("remembered")
+      .eq("user_id", userId)
+      .eq("vocab_id", vocab.id)
+      .single();
+
+    if (error) {
+      console.error("Error fetching remembered state:", error);
+      setRemembered(false); // fallback
+    } else {
+      setRemembered(data?.remembered ?? false);
+    }
+    setIsLoadingRemembered(false);
+  };
+
+  loadRemembered();
+}, [userId, index]);
 
   // 3. Toggle remembered state
   const toggleRemembered = async () => {
@@ -118,56 +125,77 @@ const vocab = vocabList[index];
           単語一覧へ戻る
         </button>
       </div>
-      <div className="row">
-        <h1 className="text-xl font-bold">{vocab.word}</h1>
-        <button onClick={() => speak(vocab.word, "en-US")}>
-          <Volume2 />
-          <Flag code="US" style={{ width: 24, height: 16 }} />
-        </button>
-        <button onClick={() => speak(vocab.word, "en-GB")}>
-          <Volume2 />
-          <Flag code="GB" style={{ width: 24, height: 16 }} />
-        </button>
-      </div>
-      {/* Remembered checkbox */}
-      <label className="block my-2">
-        <input
-          type="checkbox"
-          checked={remembered}
-          onChange={toggleRemembered}
-        />{" "}
-        この単語を覚えた
-      </label>
-      <h2>{vocab.japanese_meaning}</h2>
-      <div className="row">
-        <h2>{vocab.example_sentence}</h2>
-        <button onClick={() => speak(vocab.example_sentence, "en-US")}>
-          <Volume2 />
-          <Flag code="US" style={{ width: 24, height: 16 }} />
-        </button>
-        <button onClick={() => speak(vocab.example_sentence, "en-GB")}>
-          <Volume2 />
-          <Flag code="GB" style={{ width: 24, height: 16 }} />
-        </button>
-      </div>
-      <h2>{vocab.sentence_meaning}</h2>
-      <button onClick={handleGenerate} disabled={loading}>
-        {loading ? "生成中" : "例文を生成する"}
-      </button>
-      {generatedSentence && (
-        <div className="mt-4 p-4 border rounded-md bg-indigo-50">
-          <h3>生成された例文: {generatedSentence}</h3>
-          <h3>意味： {generatedMeaning}</h3>
-          <button onClick={() => speak(generatedSentence, "en-US")}>
-            <Volume2 />
-            <Flag code="US" style={{ width: 24, height: 16 }} />
+      <div className="flex-container">
+          <button
+            onClick={() => setIndex(index - 1)}
+            disabled={index === 0}
+            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          >
+            前へ
           </button>
-          <button onClick={() => speak(generatedSentence, "en-GB")}>
-            <Volume2 />
-            <Flag code="GB" style={{ width: 24, height: 16 }} />
+          
+        <div>
+          
+          <div className="row">
+            <h1 className="text-xl font-bold">{vocab.word}</h1>
+            <button onClick={() => speak(vocab.word, "en-US")}>
+              <Volume2 />
+              <Flag code="US" style={{ width: 24, height: 16 }} />
+            </button>
+            <button onClick={() => speak(vocab.word, "en-GB")}>
+              <Volume2 />
+              <Flag code="GB" style={{ width: 24, height: 16 }} />
+            </button>
+          </div>
+          {/* Remembered checkbox */}
+          <label className="block my-2">
+            <input
+              type="checkbox"
+              checked={remembered}
+              onChange={toggleRemembered}
+            />{" "}
+            この単語を覚えた
+          </label>
+          <h2>{vocab.japanese_meaning}</h2>
+          <div className="row">
+            <h2>{vocab.example_sentence}</h2>
+            <button onClick={() => speak(vocab.example_sentence, "en-US")}>
+              <Volume2 />
+              <Flag code="US" style={{ width: 24, height: 16 }} />
+            </button>
+            <button onClick={() => speak(vocab.example_sentence, "en-GB")}>
+              <Volume2 />
+              <Flag code="GB" style={{ width: 24, height: 16 }} />
+            </button>
+          </div>
+          <h2>{vocab.sentence_meaning}</h2>
+          <button onClick={handleGenerate} disabled={loading}>
+            {loading ? "生成中" : "例文を生成する"}
           </button>
+          {generatedSentence && (
+            <div className="mt-4 p-4 border rounded-md bg-indigo-50">
+              <h3>生成された例文: {generatedSentence}</h3>
+              <h3>意味： {generatedMeaning}</h3>
+              <button onClick={() => speak(generatedSentence, "en-US")}>
+                <Volume2 />
+                <Flag code="US" style={{ width: 24, height: 16 }} />
+              </button>
+              <button onClick={() => speak(generatedSentence, "en-GB")}>
+                <Volume2 />
+                <Flag code="GB" style={{ width: 24, height: 16 }} />
+              </button>
+            </div>
+          )}
+          
         </div>
-      )}
+        <button
+            onClick={() => setIndex(index + 1)}
+            disabled={index === vocabList.length - 1}
+            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          >
+            次へ
+          </button>
+      </div>
     </div>
   );
 };
