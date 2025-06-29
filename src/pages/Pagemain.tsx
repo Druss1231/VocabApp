@@ -16,7 +16,7 @@ function PageMain() {
       <ul className="list-group">
         {items.map((item) => (
           <button
-            className="list-group-item"
+            className="card"
             key={item.path}
             onClick={() => navigate(item.path)}
           >
