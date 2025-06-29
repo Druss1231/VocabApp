@@ -12,6 +12,7 @@ import Page700 from "./pages/Page700";
 import Page800 from "./pages/Page800";
 import Page900 from "./pages/Page900";
 import Meaning from "./pages/Meaning";
+import Quiz from "./pages/Quiz";
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -42,6 +43,7 @@ function App() {
           <Route path="/800" element={<Page800 />} />
           <Route path="/900" element={<Page900 />} />
           <Route path="/meaning" element={<Meaning />} />
+          <Route path="/quiz" element={<Quiz />} />
         </Routes>
       </Layout>
     </BrowserRouter>

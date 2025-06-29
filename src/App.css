@@ -51,3 +51,42 @@
   align-items: center;
   gap: 30px;
 }
+
+.flex-container-10{
+    display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.option-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* Full width buttons */
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.option-button {
+  padding: 0.75em 1em;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.option-button:hover:not(:disabled) {
+  background-color: #f0f0f0;
+}
+
+.option-button.correct {
+  background-color: #c8f7c5; /* light green */
+  border-color: #4caf50;
+}
+
+.option-button.wrong {
+  background-color: #f7c5c5; /* light red */
+  border-color: #f44336;
+}
