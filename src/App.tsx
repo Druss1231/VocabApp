@@ -7,6 +7,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Auth from './pages/Authentication';
 import Layout from "./pages/Layout";
 import PageMain from "./pages/Pagemain";
+import Page300 from "./pages/Page300";
+import Page400 from "./pages/Page400";
+import Page500 from "./pages/Page500";
 import Page600 from "./pages/Page600";
 import Page700 from "./pages/Page700";
 import Page800 from "./pages/Page800";
@@ -38,6 +41,9 @@ function App() {
       <Layout>
         <Routes>
           <Route path="*" element={<PageMain />} />
+          <Route path="/300" element={<Page300 />} />
+          <Route path="/400" element={<Page400 />} />
+          <Route path="/500" element={<Page500 />} />
           <Route path="/600" element={<Page600 />} />
           <Route path="/700" element={<Page700 />} />
           <Route path="/800" element={<Page800 />} />

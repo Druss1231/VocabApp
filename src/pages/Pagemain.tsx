@@ -2,6 +2,9 @@ import { useNavigate } from "react-router-dom";
 
 function PageMain() {
   let items = [
+    { label: "300点レベル", path: "/300" },
+    { label: "400点レベル", path: "/400" },
+    { label: "500点レベル", path: "/500" },
     { label: "600点レベル", path: "/600" },
     { label: "700点レベル", path: "/700" },
     { label: "800点レベル", path: "/800" },

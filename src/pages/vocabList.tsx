@@ -59,7 +59,6 @@ function VocabList({ level }: Props) {
         .gte("level", level)
         .lte("level", level + 99)
         .order("id");
-
       if (error) {
         console.error("Error fetching data:", error);
       } else {
