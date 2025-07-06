@@ -56,7 +56,8 @@ function VocabList({ level }: Props) {
       const { data, error } = await supabase
         .from("vocabulary")
         .select("*")
-        .eq("level", level)
+        .gte("level", level)
+        .lte("level", level + 99)
         .order("id");
 
       if (error) {
@@ -77,6 +78,14 @@ function VocabList({ level }: Props) {
 
   return (
     <div className="container">
+      <div style={{ position: "fixed", top: "16px", left: "16px", zIndex: 50 }}>
+        <button
+          onClick={() => navigate(-1)}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 shadow"
+        >
+          レベル選択へ戻る
+        </button>
+      </div>
       <h2>単語一覧 (レベル {level})</h2>
       <div className="flex-container-10">
         <button
@@ -104,29 +113,33 @@ function VocabList({ level }: Props) {
           覚えてない単語
         </button>
       </div>
-<button
-  onClick={() => navigate("/quiz", { state: { vocabList: filteredList } })}
-  className="my-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
->
-  この単語でクイズを始める
-</button>
-<ul className="vocab-list">
-  {filteredList.map((item, index) => (
-    <li key={item.id}>
       <button
-        className="vocab-card"
-        onClick={() => navigate('/meaning', {
-          state: {
-            vocabList: filteredList,
-            currentIndex: index
-          }
-        })}
+        onClick={() =>
+          navigate("/quiz", { state: { vocabList: filteredList } })
+        }
+        className="my-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
       >
-        {item.word}
+        この単語でクイズを始める
       </button>
-    </li>
-  ))}
-</ul>
+      <ul className="vocab-list">
+        {filteredList.map((item, index) => (
+          <li key={item.id}>
+            <button
+              className="vocab-card"
+              onClick={() =>
+                navigate("/meaning", {
+                  state: {
+                    vocabList: filteredList,
+                    currentIndex: index,
+                  },
+                })
+              }
+            >
+              {item.word}
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
