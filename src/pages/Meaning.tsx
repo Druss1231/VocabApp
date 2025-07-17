@@ -101,7 +101,8 @@ useEffect(() => {
 
   const handleGenerate = async () => {
     setLoading(true);
-    const res = await fetch("http://127.0.0.1:5000/generate", {
+    // const res = await fetch("http://127.0.0.1:5000/generate", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ word: vocab.word }),
