@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../../supabaseClient";
-import "./css/Auth.css"; // CSSファイルを読み込み
+import "./css/auth.css"; // CSSファイルを読み込み
 
 const Auth = () => {
   const [email, setEmail] = useState("");
