@@ -5,10 +5,14 @@ import { supabase } from "../../supabaseClient";
 function PageMain() {
   const navigate = useNavigate();
   const [userId, setUserId] = useState<string | null>(null);
-  const [rememberedCounts, setRememberedCounts] = useState<Record<number, number>>({});
+  const [rememberedCounts, setRememberedCounts] = useState<
+    Record<number, number>
+  >({});
   const [totalCounts, setTotalCounts] = useState<Record<number, number>>({});
 
   const levels = [300, 400, 500, 600, 700, 800, 900];
+  const [totalSum, setTotalSum] = useState(0);
+  const [rememberedSum, setRememberedSum] = useState(0);
 
   // ユーザーIDを取得
   useEffect(() => {
@@ -24,9 +28,7 @@ function PageMain() {
   // vocabulary テーブルから各レベルの単語数を取得
   useEffect(() => {
     const fetchTotalCounts = async () => {
-      const { data, error } = await supabase
-        .from("vocabulary")
-        .select("level");
+      const { data, error } = await supabase.from("vocabulary").select("level");
 
       if (error || !data) {
         console.error("Error fetching vocabulary levels:", error);
@@ -34,9 +36,14 @@ function PageMain() {
       }
 
       const counts: Record<number, number> = {};
-      data.forEach(({ level }) => {
-        counts[level] = (counts[level] || 0) + 1;
-      });
+
+      for (const baseLevel of levels) {
+        const upperBound = baseLevel + 99;
+        counts[baseLevel] = data.filter(
+          (item) => item.level >= baseLevel && item.level <= upperBound
+        ).length;
+      }
+
       setTotalCounts(counts);
     };
 
@@ -81,9 +88,28 @@ function PageMain() {
     fetchRememberedCounts();
   }, [userId]);
 
+  useEffect(() => {
+    // 各レベルの totalCounts を合計
+    const sum = Object.values(totalCounts).reduce((acc, cur) => acc + cur, 0);
+    setTotalSum(sum);
+  }, [totalCounts]);
+
+  useEffect(() => {
+    const sum = Object.values(rememberedCounts).reduce(
+      (acc, cur) => acc + cur,
+      0
+    );
+    setRememberedSum(sum);
+  }, [rememberedCounts]);
+
   return (
     <>
-      <h1>レベル選択</h1>
+      <h1 style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        レベル選択
+        <span style={{ fontSize: "1rem", color: "#888" }}>
+          {rememberedSum} / {totalSum}
+        </span>
+      </h1>
       <ul className="list-group" style={{ listStyle: "none", padding: 0 }}>
         {levels.map((level) => {
           const remembered = rememberedCounts[level] || 0;
@@ -107,7 +133,13 @@ function PageMain() {
                 <div style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   {level}点レベル
                 </div>
-                <div style={{ fontSize: "0.9rem", color: "#555", marginTop: "4px" }}>
+                <div
+                  style={{
+                    fontSize: "0.9rem",
+                    color: "#555",
+                    marginTop: "4px",
+                  }}
+                >
                   {remembered} / {total}
                 </div>
               </button>
