@@ -28,6 +28,14 @@ const speak = (text: string, lang: string) => {
 const Meaning = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  if (!location.state) {
+    return (
+      <div>単語データがありません。トップページからアクセスしてください。
+        <button onClick={() => navigate(-1)}>戻る</button>
+      </div>
+      
+    );
+  }
   const { vocabList, currentIndex } = location.state as {
     vocabList: Vocab[];
     currentIndex: number;
@@ -54,35 +62,35 @@ const Meaning = () => {
     fetchUser();
   }, []);
 
-useEffect(() => {
-  if (!userId) return;
+  useEffect(() => {
+    if (!userId) return;
 
-  const vocab = vocabList[index]; // ✅ Recalculate based on index
+    const vocab = vocabList[index]; // ✅ Recalculate based on index
 
-  // Reset UI states when word changes
-  setGeneratedSentence("");
-  setGeneratedMeaning("");
-  setIsLoadingRemembered(true);
+    // Reset UI states when word changes
+    setGeneratedSentence("");
+    setGeneratedMeaning("");
+    setIsLoadingRemembered(true);
 
-  const loadRemembered = async () => {
-    const { data, error } = await supabase
-      .from("remembered_words")
-      .select("remembered")
-      .eq("user_id", userId)
-      .eq("vocab_id", vocab.id)
-      .single();
+    const loadRemembered = async () => {
+      const { data, error } = await supabase
+        .from("remembered_words")
+        .select("remembered")
+        .eq("user_id", userId)
+        .eq("vocab_id", vocab.id)
+        .single();
 
-    if (error) {
-      console.error("Error fetching remembered state:", error);
-      setRemembered(false); // fallback
-    } else {
-      setRemembered(data?.remembered ?? false);
-    }
-    setIsLoadingRemembered(false);
-  };
+      if (error) {
+        console.error("Error fetching remembered state:", error);
+        setRemembered(false); // fallback
+      } else {
+        setRemembered(data?.remembered ?? false);
+      }
+      setIsLoadingRemembered(false);
+    };
 
-  loadRemembered();
-}, [userId, index]);
+    loadRemembered();
+  }, [userId, index]);
 
   // 3. Toggle remembered state
   const toggleRemembered = async () => {
@@ -127,16 +135,15 @@ useEffect(() => {
         </button>
       </div>
       <div className="flex-container">
-          <button
-            onClick={() => setIndex(index - 1)}
-            disabled={index === 0}
-            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-          >
-            前へ
-          </button>
-          
+        <button
+          onClick={() => setIndex(index - 1)}
+          disabled={index === 0}
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          前へ
+        </button>
+
         <div>
-          
           <div className="row">
             <h1 className="text-xl font-bold">{vocab.word}</h1>
             <button onClick={() => speak(vocab.word, "en-US")}>
@@ -187,15 +194,14 @@ useEffect(() => {
               </button>
             </div>
           )}
-          
         </div>
         <button
-            onClick={() => setIndex(index + 1)}
-            disabled={index === vocabList.length - 1}
-            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-          >
-            次へ
-          </button>
+          onClick={() => setIndex(index + 1)}
+          disabled={index === vocabList.length - 1}
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          次へ
+        </button>
       </div>
     </div>
   );
