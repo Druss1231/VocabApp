@@ -1,9 +1,8 @@
 .container {
-  max-width: 600px;
+  width: 100%;
+  max-width: 1200px; /* prevent it from stretching too much on big screens */
   margin: 0 auto;
-  padding: 16px;
-  text-align: center; /* ensures text starts from left */
-  align-items: center;
+  padding: 0 16px; /* padding for smaller devices */
 }
 
 :root {
@@ -82,10 +81,17 @@ button:focus-visible {
   list-style: none;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Fixed 3 columns */
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-top: 24px;
 }
+
+@media (max-width: 600px) {
+  .vocab-list {
+    grid-template-columns: repeat(2, 1fr); /* モバイルでは2列 */
+  }
+}
+
 
 .vocab-card {
   background-color: white;
