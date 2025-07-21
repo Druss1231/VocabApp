@@ -109,3 +109,9 @@ button:focus-visible {
   background-color:rgb(189, 189, 209);
   transform: translateY(-2px);
 }
+
+.vocab-card.remembered {
+  background-color: #d4edda; /* 薄い緑 */
+  border-color: #c3e6cb;
+  color: #155724;
+}

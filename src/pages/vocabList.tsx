@@ -115,7 +115,9 @@ function VocabList({ level }: Props) {
         </button>
         <button
           onClick={() => setFilter("unremembered")}
-          className={`filter-button ${filter === "unremembered" ? "active" : ""}`}
+          className={`filter-button ${
+            filter === "unremembered" ? "active" : ""
+          }`}
         >
           覚えてない単語
         </button>
@@ -132,7 +134,9 @@ function VocabList({ level }: Props) {
         {filteredList.map((item, index) => (
           <li key={item.id}>
             <button
-              className="vocab-card"
+              className={`vocab-card ${
+                rememberedWords.includes(item.id) ? "remembered" : ""
+              }`}
               onClick={() =>
                 navigate("/meaning", {
                   state: {
