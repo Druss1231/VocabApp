@@ -39,7 +39,7 @@ def generateExampleSetences(r):
     print(f)
     reader = csv.reader(f)
     for row in reader:
-      level = int(row[0])
+      level = 900
       word = row[1]
       short_japanese_definition = row[2]
       example_sentence = row[3].replace(",", "\\,")
