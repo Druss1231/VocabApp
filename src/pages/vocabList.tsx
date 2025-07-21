@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
+import "./css/vocablist.css";
 type Props = {
   level: number;
 };
@@ -85,29 +86,36 @@ function VocabList({ level }: Props) {
           レベル選択へ戻る
         </button>
       </div>
-      <h2>単語一覧 (レベル {level})</h2>
+      <h2>
+        単語一覧 (レベル {level})
+        {vocabList.length > 0 && (
+          <span style={{ fontSize: "0.8em", marginLeft: "1em", color: "#555" }}>
+            覚えた:{" "}
+            {
+              rememberedWords.filter((id) =>
+                vocabList.map((v) => v.id).includes(id)
+              ).length
+            }{" "}
+            / {vocabList.length}
+          </span>
+        )}
+      </h2>
       <div className="flex-container-10">
         <button
           onClick={() => setFilter("all")}
-          className={`px-3 py-1 rounded ${
-            filter === "all" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+          className={`filter-button ${filter === "all" ? "active" : ""}`}
         >
           全て
         </button>
         <button
           onClick={() => setFilter("remembered")}
-          className={`px-3 py-1 rounded ${
-            filter === "remembered" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+          className={`filter-button ${filter === "remembered" ? "active" : ""}`}
         >
           覚えた単語
         </button>
         <button
           onClick={() => setFilter("unremembered")}
-          className={`px-3 py-1 rounded ${
-            filter === "unremembered" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+          className={`filter-button ${filter === "unremembered" ? "active" : ""}`}
         >
           覚えてない単語
         </button>
