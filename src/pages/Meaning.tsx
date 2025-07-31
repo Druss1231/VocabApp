@@ -30,10 +30,10 @@ const Meaning = () => {
   const location = useLocation();
   if (!location.state) {
     return (
-      <div>単語データがありません。トップページからアクセスしてください。
+      <div>
+        単語データがありません。トップページからアクセスしてください。
         <button onClick={() => navigate(-1)}>戻る</button>
       </div>
-      
     );
   }
   const { vocabList, currentIndex } = location.state as {
@@ -138,70 +138,71 @@ const Meaning = () => {
         <button
           onClick={() => setIndex(index - 1)}
           disabled={index === 0}
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          className="fancy-button"
         >
           前へ
         </button>
-
-        <div>
-          <div className="row">
-            <h1 className="text-xl font-bold">{vocab.word}</h1>
-            <button onClick={() => speak(vocab.word, "en-US")}>
-              <Volume2 />
-              <Flag code="US" style={{ width: 24, height: 16 }} />
-            </button>
-            <button onClick={() => speak(vocab.word, "en-GB")}>
-              <Volume2 />
-              <Flag code="GB" style={{ width: 24, height: 16 }} />
-            </button>
-          </div>
-          {/* Remembered checkbox */}
-          <label className="block my-2">
-            <input
-              type="checkbox"
-              checked={remembered}
-              onChange={toggleRemembered}
-            />{" "}
-            この単語を覚えた
-          </label>
-          <h2>{vocab.japanese_meaning}</h2>
-          <div className="row">
-            <h2>{vocab.example_sentence}</h2>
-            <button onClick={() => speak(vocab.example_sentence, "en-US")}>
-              <Volume2 />
-              <Flag code="US" style={{ width: 24, height: 16 }} />
-            </button>
-            <button onClick={() => speak(vocab.example_sentence, "en-GB")}>
-              <Volume2 />
-              <Flag code="GB" style={{ width: 24, height: 16 }} />
-            </button>
-          </div>
-          <h2>{vocab.sentence_meaning}</h2>
-          <button onClick={handleGenerate} disabled={loading}>
-            {loading ? "生成中" : "例文を生成する"}
-          </button>
-          {generatedSentence && (
-            <div className="mt-4 p-4 border rounded-md bg-indigo-50">
-              <h3>生成された例文: {generatedSentence}</h3>
-              <h3>意味： {generatedMeaning}</h3>
-              <button onClick={() => speak(generatedSentence, "en-US")}>
-                <Volume2 />
-                <Flag code="US" style={{ width: 24, height: 16 }} />
-              </button>
-              <button onClick={() => speak(generatedSentence, "en-GB")}>
-                <Volume2 />
-                <Flag code="GB" style={{ width: 24, height: 16 }} />
-              </button>
-            </div>
-          )}
-        </div>
         <button
           onClick={() => setIndex(index + 1)}
           disabled={index === vocabList.length - 1}
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          className="fancy-button"
         >
           次へ
         </button>
+      </div>
+
+      <div>
+        <div className="row">
+          <h1 className="text-xl font-bold">{vocab.word}</h1>
+          <button onClick={() => speak(vocab.word, "en-US")}>
+            <Volume2 />
+            <Flag code="US" style={{ width: 24, height: 16 }} />
+          </button>
+          <button onClick={() => speak(vocab.word, "en-GB")}>
+            <Volume2 />
+            <Flag code="GB" style={{ width: 24, height: 16 }} />
+          </button>
+        </div>
+        {/* Remembered checkbox */}
+        <label className="custom-checkbox">
+          <input
+            type="checkbox"
+            checked={remembered}
+            onChange={toggleRemembered}
+          />
+          この単語を覚えた
+        </label>
+
+        <h2>{vocab.japanese_meaning}</h2>
+        <div className="row">
+          <h2>{vocab.example_sentence}</h2>
+          <button onClick={() => speak(vocab.example_sentence, "en-US")}>
+            <Volume2 />
+            <Flag code="US" style={{ width: 24, height: 16 }} />
+          </button>
+          <button onClick={() => speak(vocab.example_sentence, "en-GB")}>
+            <Volume2 />
+            <Flag code="GB" style={{ width: 24, height: 16 }} />
+          </button>
+        </div>
+        <h2>{vocab.sentence_meaning}</h2>
+        <button onClick={handleGenerate} disabled={loading}>
+          {loading ? "生成中" : "例文を生成する"}
+        </button>
+        {generatedSentence && (
+          <div className="mt-4 p-4 border rounded-md bg-indigo-50">
+            <h3>生成された例文: {generatedSentence}</h3>
+            <h3>意味： {generatedMeaning}</h3>
+            <button onClick={() => speak(generatedSentence, "en-US")}>
+              <Volume2 />
+              <Flag code="US" style={{ width: 24, height: 16 }} />
+            </button>
+            <button onClick={() => speak(generatedSentence, "en-GB")}>
+              <Volume2 />
+              <Flag code="GB" style={{ width: 24, height: 16 }} />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

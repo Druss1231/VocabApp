@@ -47,9 +47,9 @@
 
 .flex-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 1rem;
 }
 
 @media (min-width: 768px) {
@@ -96,4 +96,29 @@
 .option-button.wrong {
   background-color: #f7c5c5; /* light red */
   border-color: #f44336;
+}
+
+.fancy-button {
+  background-color: #4f46e5;       /* 濃いインディゴ */
+  color: white;
+  padding: 0.6em 1.4em;
+  border: none;
+  border-radius: 9999px;           /* 丸み強め */
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.fancy-button:hover:not(:disabled) {
+  background-color: #3730a3;       /* hoverで濃く */
+  transform: scale(1.05);
+}
+
+.fancy-button:disabled {
+  background-color: #d1d5db;       /* グレー系 */
+  color: #6b7280;
+  cursor: not-allowed;
+  box-shadow: none;
 }

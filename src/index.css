@@ -114,3 +114,42 @@ button:focus-visible {
   border-color: #c3e6cb;
   color: #155724;
 }
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  justify-content: center; 
+}
+
+.custom-checkbox input[type="checkbox"] {
+  appearance: none;
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid #4f46e5; /* indigo */
+  border-radius: 4px;
+  display: grid;
+  place-content: center;
+  transition: background 0.2s, border 0.2s;
+}
+
+.custom-checkbox input[type="checkbox"]::before {
+  content: "✓";
+  font-size: 1em;
+  color: white;
+  transform: scale(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+.custom-checkbox input[type="checkbox"]:checked {
+  background-color: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.custom-checkbox input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
