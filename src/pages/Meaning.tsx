@@ -127,28 +127,27 @@ const Meaning = () => {
   return (
     <div className="container relative">
       <div style={{ position: "fixed", top: "16px", left: "16px", zIndex: 50 }}>
-        <button
-          onClick={() => navigate(-1)}
-          className="fancy-button"
-        >
+        <button onClick={() => navigate(-1)} className="fancy-button">
           単語一覧へ戻る
         </button>
       </div>
-      <div className="flex-container">
-        <button
-          onClick={() => setIndex(index - 1)}
-          disabled={index === 0}
-          className="fancy-button"
-        >
-          前へ
-        </button>
-        <button
-          onClick={() => setIndex(index + 1)}
-          disabled={index === vocabList.length - 1}
-          className="fancy-button"
-        >
-          次へ
-        </button>
+      <div className="flex-container nav-buttons">
+        <div className="flex-container">
+          <button
+            onClick={() => setIndex(index - 1)}
+            disabled={index === 0}
+            className="fancy-button"
+          >
+            前へ
+          </button>
+          <button
+            onClick={() => setIndex(index + 1)}
+            disabled={index === vocabList.length - 1}
+            className="fancy-button"
+          >
+            次へ
+          </button>
+        </div>
       </div>
 
       <div>
