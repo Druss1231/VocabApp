@@ -129,7 +129,7 @@ const Meaning = () => {
       <div style={{ position: "fixed", top: "16px", left: "16px", zIndex: 50 }}>
         <button
           onClick={() => navigate(-1)}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 shadow"
+          className="fancy-button"
         >
           単語一覧へ戻る
         </button>
