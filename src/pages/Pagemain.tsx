@@ -104,12 +104,21 @@ function PageMain() {
 
   return (
     <>
-      <h1 style={{ display: "flex", alignItems: "center", gap: "12px" ,maxWidth: "300px",}}>
+      <h2
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: "2rem",
+          textAlign: "center",
+          gap: "4px", // 上下の間隔
+        }}
+      >
         レベル選択
         <span style={{ fontSize: "1rem", color: "#888" }}>
           {rememberedSum} / {totalSum}
         </span>
-      </h1>
+      </h2>
       <ul className="list-group" style={{ listStyle: "none", padding: 0 }}>
         {levels.map((level) => {
           const remembered = rememberedCounts[level] || 0;
