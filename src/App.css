@@ -122,3 +122,9 @@
   cursor: not-allowed;
   box-shadow: none;
 }
+
+@media (max-width: 767px) {
+  .fancy-button.next-button {
+    margin-top: 10px; /* お好みの下スペースに調整してください */
+  }
+}
