@@ -1,10 +1,9 @@
 .container {
-  width: 100%;
-  max-width: 1200px; /* prevent it from stretching too much on big screens */
+  max-width: 600px;
   margin: 0 auto;
-  padding: 0 16px; /* padding for smaller devices */
+  padding: 1rem;
+  text-align: center;
 }
-
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
