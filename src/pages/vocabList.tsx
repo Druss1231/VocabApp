@@ -86,20 +86,27 @@ function VocabList({ level }: Props) {
           レベル選択へ戻る
         </button>
       </div>
-      <h2>
-        単語一覧 (レベル {level})
-        {vocabList.length > 0 && (
-          <span style={{ fontSize: "0.8em", marginLeft: "1em", color: "#555" }}>
-            覚えた:{" "}
-            {
-              rememberedWords.filter((id) =>
-                vocabList.map((v) => v.id).includes(id)
-              ).length
-            }{" "}
-            / {vocabList.length}
-          </span>
-        )}
-      </h2>
+      <h2>単語一覧 (レベル {level})</h2>
+      {vocabList.length > 0 && (
+        <span
+          style={{
+            fontSize: "1rem",
+            color: "#555",
+            marginBottom: "12px",
+            padding: "0.5em 1em",
+            display: "block",
+            textAlign: "center",
+          }}
+        >
+          覚えた:{" "}
+          {
+            rememberedWords.filter((id) =>
+              vocabList.map((v) => v.id).includes(id)
+            ).length
+          }{" "}
+          / {vocabList.length}
+        </span>
+      )}
       <div className="flex-container-10">
         <button
           onClick={() => setFilter("all")}

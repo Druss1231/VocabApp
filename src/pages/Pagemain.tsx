@@ -104,7 +104,7 @@ function PageMain() {
 
   return (
     <>
-      <h1 style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+      <h1 style={{ display: "flex", alignItems: "center", gap: "12px" ,maxWidth: "300px",}}>
         レベル選択
         <span style={{ fontSize: "1rem", color: "#888" }}>
           {rememberedSum} / {totalSum}
