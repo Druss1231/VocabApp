@@ -80,7 +80,7 @@ function VocabList({ level }: Props) {
     <div className="container">
       <div style={{ position: "fixed", top: "16px", left: "16px", zIndex: 50 }}>
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/Pagemain")}
           className="fancy-button"
         >
           レベル選択へ戻る
