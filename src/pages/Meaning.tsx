@@ -12,13 +12,6 @@ type Vocab = {
   sentence_meaning: string;
 };
 
-useEffect(() => {
-  speechSynthesis.onvoiceschanged = () => {
-    const voices = speechSynthesis.getVoices();
-    console.log("読み込み完了:", voices);
-  };
-}, []);
-
 const speak = (text: string, lang: string) => {
   window.speechSynthesis.cancel(); 
   const utterance = new SpeechSynthesisUtterance(text);
@@ -73,6 +66,14 @@ const Meaning = () => {
   const [remembered, setRemembered] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoadingRemembered, setIsLoadingRemembered] = useState(true); // Add loading state
+
+  useEffect(() => {
+  speechSynthesis.onvoiceschanged = () => {
+    const voices = speechSynthesis.getVoices();
+    console.log("読み込み完了:", voices);
+  };
+}, []);
+
 
   // 1. Get current user on mount
   useEffect(() => {
