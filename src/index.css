@@ -4,6 +4,11 @@
   padding: 1rem;
   text-align: center;
 }
+@media screen and (max-width: 480px) {
+  .container {
+    max-width: 95%; /* 画面幅の95%にすることで余白を確保しつつ縮小 */
+  }
+}
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

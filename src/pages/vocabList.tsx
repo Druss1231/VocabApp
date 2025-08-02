@@ -133,7 +133,7 @@ function VocabList({ level }: Props) {
         onClick={() =>
           navigate("/quiz", { state: { vocabList: filteredList } })
         }
-        className="my-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+        className="filter-button"
       >
         この単語でクイズを始める
       </button>

@@ -60,10 +60,11 @@
 }
 
 .flex-container-10{
-    display: flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+  margin-bottom: 20px;
 }
 
 .option-container {
