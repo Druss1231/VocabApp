@@ -1,8 +1,15 @@
 .container {
-  max-width: 90vw;
+  max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
   text-align: center;
+  width: 100%;
+}
+@media screen and (max-width: 480px) {
+  .container {
+    max-width: 95%;
+    padding: 0.5rem;
+  }
 }
 
 :root {
