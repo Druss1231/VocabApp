@@ -12,18 +12,41 @@ type Vocab = {
   sentence_meaning: string;
 };
 
+useEffect(() => {
+  speechSynthesis.onvoiceschanged = () => {
+    const voices = speechSynthesis.getVoices();
+    console.log("読み込み完了:", voices);
+  };
+}, []);
+
 const speak = (text: string, lang: string) => {
+  window.speechSynthesis.cancel(); 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
 
   const voices = window.speechSynthesis.getVoices();
-  const matchingVoice = voices.find((voice) => voice.lang === lang);
-  if (matchingVoice) {
-    utterance.voice = matchingVoice;
-  }
 
+  // Siri を優先的に探す（macOS / iOS Safari 用）
+  const siriVoice = voices.find(
+    (voice) => voice.name.includes("Siri") && voice.lang === lang
+  );
+
+  // 次点：Google系や他の高品質音声を探す
+  const fallbackVoice = voices.find(
+    (voice) =>
+      voice.lang === lang &&
+      (voice.name.includes("Google") ||
+       voice.name.includes("Microsoft") ||
+       voice.name.includes("Alex") ||
+       voice.name.includes("Daniel") ||
+       voice.name.includes("Karen"))
+  );
+
+  utterance.voice = siriVoice || fallbackVoice || null;
   window.speechSynthesis.speak(utterance);
 };
+
+
 
 const Meaning = () => {
   const navigate = useNavigate();
