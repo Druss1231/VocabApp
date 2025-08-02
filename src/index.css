@@ -106,11 +106,12 @@ list-style: none;
   color: black;
   padding: 12px 16px;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: clamp(0.8rem, 2vw, 1.2rem);
   font-weight: bold;
   text-align: center;
   transition: background-color 0.2s ease, transform 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  
 }
 
 .vocab-card:hover {
