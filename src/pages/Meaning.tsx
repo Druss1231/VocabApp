@@ -185,7 +185,7 @@ const Meaning = () => {
           </button>
         </div>
         <h2>{vocab.sentence_meaning}</h2>
-        <button onClick={handleGenerate} disabled={loading}>
+        <button className="fancy-button" onClick={handleGenerate} disabled={loading}>
           {loading ? "生成中" : "例文を生成する"}
         </button>
         {generatedSentence && (
