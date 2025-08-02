@@ -96,6 +96,7 @@ list-style: none;
 @media (max-width: 600px) {
   .vocab-list {
     grid-template-columns: repeat(2, 1fr); /* モバイルでは2列 */
+    max-width: 95%;
   }
 }
 
