@@ -13,30 +13,36 @@ type Vocab = {
 };
 
 const speak = (text: string, lang: string) => {
-  window.speechSynthesis.cancel(); 
+  window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
 
+  const pickVoice = () => {
+    const voices = window.speechSynthesis.getVoices();
+
+    // 優先順位でネイティブ英語音声を選ぶ
+    const preferredVoice = voices.find((voice) =>
+      voice.name.includes("Google") && voice.lang === lang
+    ) || voices.find((voice) =>
+      voice.name.includes("Siri") && voice.lang === lang
+    ) || voices.find((voice) =>
+      voice.name.includes("Daniel") || voice.name.includes("Karen")
+    ) || voices.find((voice) => voice.lang === lang);
+
+    utterance.voice = preferredVoice || null;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // すぐに声が取得できるかどうかを確認
   const voices = window.speechSynthesis.getVoices();
-
-  // Siri を優先的に探す（macOS / iOS Safari 用）
-  const siriVoice = voices.find(
-    (voice) => voice.name.includes("Siri") && voice.lang === lang
-  );
-
-  // 次点：Google系や他の高品質音声を探す
-  const fallbackVoice = voices.find(
-    (voice) =>
-      voice.lang === lang &&
-      (voice.name.includes("Google") ||
-       voice.name.includes("Microsoft") ||
-       voice.name.includes("Alex") ||
-       voice.name.includes("Daniel") ||
-       voice.name.includes("Karen"))
-  );
-
-  utterance.voice = siriVoice || fallbackVoice || null;
-  window.speechSynthesis.speak(utterance);
+  if (voices.length > 0) {
+    pickVoice();
+  } else {
+    // voice list がまだ準備できていない場合、onvoiceschanged イベントで待つ
+    window.speechSynthesis.onvoiceschanged = () => {
+      pickVoice();
+    };
+  }
 };
 
 
